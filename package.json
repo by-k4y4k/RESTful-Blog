@@ -1,0 +1,17 @@
+{
+  "name": "restful-blog",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "by-k4y4k <41324271+by-k4y4k@users.noreply.github.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.10.0",
+    "eslint-config-google": "^0.11.0"
+  }
+}

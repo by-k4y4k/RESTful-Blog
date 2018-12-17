@@ -30,15 +30,9 @@ const blogSchema = new mongoose.Schema({
 
 const Blog = mongoose.model("Blog", blogSchema);
 
-Blog.create({
-  title: "Does it?",
-  image: "https://pbs.twimg.com/media/DZmkiWbX4AAfz4b.png",
-  body: "He might do it, but has it been done too far?",
-});
-
 // RESTful routes:
 
-// root redirect to /blogs:
+// / => /blogs
 app.get("/", function(req, res) {
   res.redirect("/blogs");
 });
@@ -55,9 +49,27 @@ app.get("/blogs", function(req, res) {
   });
 });
 
-// create
+// New route
+app.get("/blogs/new", function(req, res) {
+  res.render("new");
+});
 
-// new
+// Create route
+
+app.post("/blogs", function(req, res) {
+  /* The form inputs were given the name attrivute of blog[title], blog[body]
+  and blog[image]. This means that the title, body and image associated with the
+  blog post can be accessed from the blog object inside of the body object which
+  is then inside of the request object. */
+  Blog.create(req.body.blog, function(err, newBlog) {
+    if (err) {
+      res.render("new");
+    } else {
+      // redirect to blog list
+      res.redirect("/blogs");
+    }
+  });
+});
 
 // show
 

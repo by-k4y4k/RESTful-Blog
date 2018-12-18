@@ -1,5 +1,5 @@
-// SECTION 31 LECTURE 308
-// RESTFUL BLOG - EDIT AND UPDATE
+// SECTION 31 LECTURE 309
+// RESTFUL BLOG - DESTROY
 
 // require consts
 const express = require("express");
@@ -12,6 +12,9 @@ const app = express();
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
+/* methodOverride will look for a specific string in GET requests - we've set it
+to '_method' and use that to determine if and when it should override the http
+method. */
 app.use(methodOverride("_method"));
 
 // mongoose connect
@@ -96,8 +99,8 @@ app.get("/blogs/:id/edit", function(req, res) {
 });
 
 // update route
-
 app.put("/blogs/:id", function(req, res) {
+  /* TODO: Express throws an error about findbyIdAndUpdate being depreciated */
   Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(
     err,
     updatedBlog
@@ -111,6 +114,17 @@ app.put("/blogs/:id", function(req, res) {
 });
 
 // destroy
+app.delete("/blogs/:id", function(req, res) {
+  Blog.findByIdAndRemove(req.params.id, function(err) {
+    /* even though both outcomes are the same, it's good to have... um, error
+    acknowledging.*/
+    if (err) {
+      res.redirect("/blogs");
+    } else {
+      res.redirect("/blogs");
+    }
+  });
+});
 
 app.listen("1234", "localhost", function() {
   // eslint-disable-next-line no-console

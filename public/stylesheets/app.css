@@ -1,13 +1,13 @@
-body img {
-  max-width: 50%;
-}
-
-i.icon {
-  font-size: 2em;
+.description {
+  margin: 3% 0;
 }
 
 .container.main {
   margin-top: 7em;
+}
+
+div.header.item i {
+  font-size: 2em;
 }
 
 #delete {

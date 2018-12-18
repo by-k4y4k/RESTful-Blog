@@ -2,16 +2,19 @@
 // RESTFUL BLOG - DESTROY
 
 // require consts
-const express = require("express");
-const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const express = require("express");
+const expressSanitizer = require("express-sanitizer");
 const methodOverride = require("method-override");
+const mongoose = require("mongoose");
 const app = express();
 
 // app config
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
+// sanitizer must go after bodyparser
+app.use(expressSanitizer());
 /* methodOverride will look for a specific string in GET requests - we've set it
 to '_method' and use that to determine if and when it should override the http
 method. */
@@ -62,6 +65,10 @@ app.get("/blogs/new", function(req, res) {
 
 // Create route
 app.post("/blogs", function(req, res) {
+  /* it's a mouthful: 'req.body' is the body of the POST request. 'blog.body' is
+  the blog[body] from the form. */
+  req.body.blog.body = req.sanititize(req.body.blog.body);
+
   /* The form inputs were given the name attrivute of blog[title], blog[body]
   and blog[image]. This means that the title, body and image associated with the
   blog post can be accessed from the blog object inside of the body object which
@@ -100,6 +107,8 @@ app.get("/blogs/:id/edit", function(req, res) {
 
 // update route
 app.put("/blogs/:id", function(req, res) {
+  req.body.blog.body = req.sanititize(req.body.blog.body);
+
   /* TODO: Express throws an error about findbyIdAndUpdate being depreciated */
   Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(
     err,

@@ -1,15 +1,18 @@
-// SECTION 31 lecture 301
-// RESTFUL blog - index
+// SECTION 31 LECTURE 308
+// RESTFUL BLOG - EDIT AND UPDATE
 
+// require consts
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const methodOverride = require("method-override");
+const app = express();
 
 // app config
-const app = express();
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride("_method"));
 
 // mongoose connect
 mongoose.connect(
@@ -55,7 +58,6 @@ app.get("/blogs/new", function(req, res) {
 });
 
 // Create route
-
 app.post("/blogs", function(req, res) {
   /* The form inputs were given the name attrivute of blog[title], blog[body]
   and blog[image]. This means that the title, body and image associated with the
@@ -71,7 +73,7 @@ app.post("/blogs", function(req, res) {
   });
 });
 
-// show
+// show route
 app.get("/blogs/:id", function(req, res) {
   Blog.findById(req.params.id, function(err, foundBlog) {
     if (err) {
@@ -82,9 +84,31 @@ app.get("/blogs/:id", function(req, res) {
   });
 });
 
-// edit
+// edit route
+app.get("/blogs/:id/edit", function(req, res) {
+  Blog.findById(req.params.id, function(err, foundBlog) {
+    if (err) {
+      res.redirect("/blogs");
+    } else {
+      res.render("edit", {blog: foundBlog});
+    }
+  });
+});
 
-// update
+// update route
+
+app.put("/blogs/:id", function(req, res) {
+  Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(
+    err,
+    updatedBlog
+  ) {
+    if (err) {
+      res.redirect("/");
+    } else {
+      res.redirect("/blogs/" + req.params.id);
+    }
+  });
+});
 
 // destroy
 
